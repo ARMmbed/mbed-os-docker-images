@@ -1,18 +1,16 @@
 # ------------------------------------------------------------------------------
 # Pull base image
-FROM ubuntu:18.04
+FROM ubuntu:20.04
 
 # ------------------------------------------------------------------------------
 # Arguments
 ARG WORKDIR=/root
 
 # ------------------------------------------------------------------------------
-# Install base
-RUN apt -y update && apt -y dist-upgrade
-
-# ------------------------------------------------------------------------------
 # Install tools via apt
-RUN apt -y install git \
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt -y update && \
+    apt -y install git \
     wget \
     python3 \
     python3-dev \
@@ -22,7 +20,9 @@ RUN apt -y install git \
     software-properties-common \
     build-essential \
     cmake \
-    && apt-get clean && rm -rf /var/lib/apt/lists
+    astyle \
+    mercurial \
+    && apt clean && rm -rf /var/lib/apt/lists
 
 
 # ------------------------------------------------------------------------------
@@ -31,10 +31,8 @@ RUN pip3 install -U mbed-cli
 
 # Set up mbed environment
 WORKDIR /root/
-RUN git clone https://github.com/ARMmbed/mbed-os.git && \
-    cp mbed-os/requirements.txt . && \
-    rm -rf mbed-os
-RUN pip3 install -r requirements.txt
+RUN wget https://github.com/ARMmbed/mbed-os/raw/master/requirements.txt && \
+    pip3 install -r requirements.txt
 
 # ------------------------------------------------------------------------------
 # Install arm-none-eabi-gcc
