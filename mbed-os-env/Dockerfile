@@ -19,20 +19,28 @@ RUN apt -y update && \
     python3-pip \
     software-properties-common \
     build-essential \
-    cmake \
     astyle \
     mercurial \
+    ninja-build \
+    libssl-dev \
     && apt clean && rm -rf /var/lib/apt/lists
 
 
 # ------------------------------------------------------------------------------
 # Install Python modules (which are not included in requirements.txt)
-RUN pip3 install -U mbed-cli
+RUN pip3 install -U \
+    mbed-cli \
+    mbed-tools
 
 # Set up mbed environment
 WORKDIR /root/
 RUN wget https://github.com/ARMmbed/mbed-os/raw/master/requirements.txt && \
     pip3 install -r requirements.txt
+
+# ------------------------------------------------------------------------------
+# Install updated cmake - refer https://cmake.org/install/ 
+COPY cmake-3.19.0-rc3-Linux-x86_64.sh /tmp
+RUN sh /tmp/cmake-3.19.0-rc3-Linux-x86_64.sh --exclude-subdir --prefix=/usr/local
 
 # ------------------------------------------------------------------------------
 # Install arm-none-eabi-gcc
@@ -52,3 +60,4 @@ RUN python3 --version | tee env_settings && \
     (echo -n 'mbed-host-tests ' && mbedhtrun --version) | tee -a env_settings
 
 WORKDIR /root
+
