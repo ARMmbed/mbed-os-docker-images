@@ -18,7 +18,8 @@ apt-get -y install git \
     ninja-build \
     libssl-dev \
     cmake \
-    srecord
+    srecord \
+    libncurses5
 apt-get clean
 rm -rf /var/lib/apt/lists
 
