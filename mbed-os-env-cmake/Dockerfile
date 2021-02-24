@@ -36,7 +36,7 @@ RUN pip3 install -U \
 
 # Set up mbed environment
 WORKDIR /root/
-RUN wget https://github.com/ARMmbed/mbed-os/raw/master/requirements.txt && \
+RUN wget https://github.com/ARMmbed/mbed-os/raw/master/tools/cmake/requirements.txt && \
     pip3 install -r requirements.txt
 
 # ------------------------------------------------------------------------------
