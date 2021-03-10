@@ -1,11 +1,7 @@
 name: build and test image
 
 on:
-
-  schedule:
-    - cron:  '15 4 * * *'
-    
-  push:
+  pull_request:
     branches: [ master ]
 
 jobs:
@@ -57,13 +53,13 @@ jobs:
 
     steps:
       - 
-        name: Get date info
+        name: unarchive artefacts
         uses: actions/download-artifact@v2
         with:
           name: build-info
           
       - 
-        name: Get date info
+        name: Get build info from archive
         shell: bash
         id: build_info
         run: |
@@ -120,13 +116,13 @@ jobs:
         
     steps:
       - 
-        name: unarchive artefacts
+        name: unarchive build info
         uses: actions/download-artifact@v2
         with:
           name: build-info
           
       - 
-        name: Get build info
+        name: Get build info from archive
         shell: bash
         id: build_info
         run: |
@@ -209,7 +205,7 @@ jobs:
           name: build-info
         
       - 
-        name: Get build info
+        name: Get build info from archive
         shell: bash
         id: build_info
         run: |

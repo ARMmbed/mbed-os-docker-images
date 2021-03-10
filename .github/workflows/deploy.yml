@@ -80,13 +80,13 @@ jobs:
 
     steps:
       - 
-        name: Get date info
+        name: unarchive artefacts
         uses: actions/download-artifact@v2
         with:
           name: build-info
           
       - 
-        name: Get date info
+        name: Get build info from archive
         shell: bash
         id: build_info
         run: |
@@ -149,7 +149,7 @@ jobs:
           name: build-info
           
       - 
-        name: Get build info
+        name: Get build info from archive
         shell: bash
         id: build_info
         run: |
@@ -233,7 +233,7 @@ jobs:
           name: build-info
         
       - 
-        name: Get build info
+        name: Get build info from archive
         shell: bash
         id: build_info
         run: |
