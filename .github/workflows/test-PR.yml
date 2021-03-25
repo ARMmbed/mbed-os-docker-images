@@ -186,6 +186,7 @@ jobs:
             git checkout ${{ steps.build_info.outputs.MBED_OS_VERSION }}
             mbed deploy 
             mbed compile -m K64F -t GCC_ARM
+            mbed-tools compile -m K64F -t GCC_ARM
             echo "::set-output name=DEPLOY::true"
 
   cleanup:
