@@ -206,13 +206,14 @@ jobs:
           shell: bash
           run: |
             set -e 
+            set -x
             uname -m
             mbed import mbed-os-example-blinky
             cd mbed-os-example-blinky
             git checkout ${{ steps.build_info.outputs.MBED_OS_VERSION }}
             mbed deploy
-            mbed-tools compile -m K64F -t GCC_ARM
-            mbed compile -m K64F -t GCC_ARM
+            mbed-tools compile -m K64F -t GCC_ARM --clean
+            mbed compile -m K64F -t GCC_ARM --clean
             echo "::set-output name=DEPLOY::true"
             
       
