@@ -23,16 +23,17 @@ name: publish image to docker hub
 
 on:
 
-  schedule:
-    - cron:  '15 4 * * *'
+  # TODO: Enable when DockerHub Storage policy is understood
+  # schedule:
+  #   - cron:  '15 4 * * *'
     
   push:
     branches: [ master ]
 
+  on:
+    workflow_dispatch
 
 jobs:
-
-
   prepare-tags:
     runs-on: ubuntu-latest
 
@@ -123,7 +124,7 @@ jobs:
         uses: docker/build-push-action@v2
         id: docker_build_dev
         with:
-          context: ./mbed-os-env
+          context: .
           platforms: linux/amd64,linux/arm64 
           push: true
           file: ./mbed-os-env/Dockerfile
@@ -195,9 +196,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-      # no need to continue if we already have the same image in dockehub
-      # TODO: if this step errors, tag the dev image to failed.<dev_image> or similar
-      #       if step is skipped, remove the dev image
+      # no need to test (nor publish) if we already have the same image in dockerhub
       - if: steps.docker_info_prod.outputs.DIGEST != steps.docker_info_dev.outputs.DIGEST
         name: test the container
         id: test
@@ -210,7 +209,6 @@ jobs:
             echo "::set-output name=STATUS::failed"
             uname -m
             ./test.sh ${{ steps.build_info.outputs.MBED_OS_VERSION }}
-
             echo "::set-output name=STATUS::passed"
             
       
@@ -218,7 +216,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: test-container
     if:  ${{ always() }}
-    # if: needs.test-container.outputs.DEPLOY == 'true'
         
     steps:
       -

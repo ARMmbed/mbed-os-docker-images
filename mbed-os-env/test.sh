@@ -9,7 +9,7 @@ fi
 # set -e 
 # mbed import mbed-os-example-blinky
 # cd mbed-os-example-blinky
-# git checkout ${{ steps.build_info.outputs.MBED_OS_VERSION }}
+# git checkout ${MBED_OS_VERSION}
 # mbed deploy 
 # mbed compile -m K64F -t GCC_ARM
 # echo "::set-output name=STATUS::true"

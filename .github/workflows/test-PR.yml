@@ -109,7 +109,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: build-container
     outputs:
-      DEPLOY: ${{ steps.test.outputs.DEPLOY }}
+      STATUS: ${{ steps.test.outputs.STATUS }}
     strategy:
       matrix:
         platform: [linux/amd64, linux/arm64]
@@ -179,19 +179,16 @@ jobs:
           image: ${{ secrets.DOCKERHUB_USERNAME }}/mbed-os-env@${{ steps.docker_info_dev.outputs.DIGEST }}
           shell: bash
           run: |
-            set -e 
+            set -e
+            echo "::set-output name=STATUS::failed"
             uname -m
-            mbed import mbed-os-example-blinky
-            cd mbed-os-example-blinky
-            git checkout ${{ steps.build_info.outputs.MBED_OS_VERSION }}
-            mbed deploy
-            mbed compile -m K64F -t GCC_ARM
-            echo "::set-output name=DEPLOY::true"
+            ./test.sh ${{ steps.build_info.outputs.MBED_OS_VERSION }}
+            echo "::set-output name=STATUS::passed"
 
   cleanup:
     runs-on: ubuntu-latest
     needs: test-container
-    if: needs.test-container.outputs.DEPLOY == 'true'
+    if:  ${{ always() }}
         
     steps:
       -
@@ -217,7 +214,12 @@ jobs:
           echo "::set-output name=DOCKER_PROD_TAG_DATED::$value"
           value=`cat prod_tag_latest`
           echo "::set-output name=DOCKER_PROD_TAG_LATEST::$value"
-          
+
+      - if: needs.test-container.outputs.STATUS == 'failed'
+        name: Rename Dev Tag
+        run: |
+          docker run quay.io/skopeo/stable --src-creds=${{ secrets.DOCKERHUB_USERNAME }}:${{ secrets.DOCKERHUB_PASSWORD }} --dest-creds=${{ secrets.DOCKERHUB_USERNAME }}:${{ secrets.DOCKERHUB_PASSWORD }} copy --all docker://docker.io/${{ secrets.DOCKERHUB_USERNAME }}/mbed-os-env:${{ steps.build_info.outputs.DOCKER_DEV_TAG }}  docker://docker.io/${{ secrets.DOCKERHUB_USERNAME }}/mbed-os-env:failed-${{ steps.build_info.outputs.DOCKER_DEV_TAG }}
+
       - 
         name: Delete Dev Tag
         run: |
