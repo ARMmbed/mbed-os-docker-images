@@ -5,6 +5,7 @@ FROM ubuntu:20.04
 # ------------------------------------------------------------------------------
 # Arguments
 ARG WORKDIR=/root
+ARG MBED_OS_VER=master
 
 # ------------------------------------------------------------------------------
 # Install tools via apt
@@ -47,7 +48,7 @@ RUN pip3 install -U \
 
 # Set up mbed environment
 WORKDIR /tmp/
-RUN wget https://github.com/ARMmbed/mbed-os/raw/master/requirements.txt && \
+RUN wget https://github.com/ARMmbed/mbed-os/raw/${MBED_OS_VER}/requirements.txt && \
     pip3 install -r requirements.txt && \
     rm requirements.txt
 
@@ -79,4 +80,5 @@ RUN python3 --version | tee env_settings && \
     arm-none-eabi-gcc --version | tee -a env_settings && \
     (echo -n 'mbed-cli ' && mbed --version) | tee -a env_settings && \
     (echo -n 'mbed-greentea ' && mbedgt --version) | tee -a env_settings && \
-    (echo -n 'mbed-host-tests ' && mbedhtrun --version) | tee -a env_settings
+    (echo -n 'mbed-host-tests ' && mbedhtrun --version) | tee -a env_settings && \
+    (echo -n 'mbed-tools ' && mbed-tools --version) | tee -a env_settings
