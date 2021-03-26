@@ -169,8 +169,6 @@ jobs:
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
       # no need to continue if we already have the same image in dockehub
-      # TODO: if this step errors, tag the dev image to failed.<dev_image> or similar
-      #       if step is skipped, remove the dev image
       - if: steps.docker_info_prod.outputs.DIGEST != steps.docker_info_dev.outputs.DIGEST
         name: test the container
         id: test
