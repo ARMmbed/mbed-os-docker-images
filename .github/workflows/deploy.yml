@@ -209,7 +209,7 @@ jobs:
             echo "::set-output name=STATUS::failed"
             uname -m
             ./test.sh ${{ steps.build_info.outputs.MBED_OS_VERSION }}
-            echo "::set-output name=STATUS::passed"
+            
             # set -e 
             # mbed import mbed-os-example-blinky
             # cd mbed-os-example-blinky
@@ -217,6 +217,7 @@ jobs:
             # mbed deploy 
             # mbed compile -m K64F -t GCC_ARM
             # echo "::set-output name=STATUS::true"
+            echo "::set-output name=STATUS::passed"
             
       
   deploy-container:
@@ -250,14 +251,14 @@ jobs:
           value=`cat prod_tag_latest`
           echo "::set-output name=DOCKER_PROD_TAG_LATEST::$value"
           
-      - if: needs.test-container.outputs.DEPLOY == 'passed'
+      - if: needs.test-container.outputs.STATUS == 'passed'
         name: copy dev tag to prod
         run: |
           docker run quay.io/skopeo/stable --src-creds=${{ secrets.DOCKERHUB_USERNAME }}:${{ secrets.DOCKERHUB_PASSWORD }} --dest-creds=${{ secrets.DOCKERHUB_USERNAME }}:${{ secrets.DOCKERHUB_PASSWORD }} copy --all docker://docker.io/${{ secrets.DOCKERHUB_USERNAME }}/mbed-os-env:${{ steps.build_info.outputs.DOCKER_DEV_TAG }}  docker://docker.io/${{ secrets.DOCKERHUB_USERNAME }}/mbed-os-env:${{ steps.build_info.outputs.DOCKER_PROD_TAG_LATEST }}
           docker run quay.io/skopeo/stable --src-creds=${{ secrets.DOCKERHUB_USERNAME }}:${{ secrets.DOCKERHUB_PASSWORD }} --dest-creds=${{ secrets.DOCKERHUB_USERNAME }}:${{ secrets.DOCKERHUB_PASSWORD }} copy --all docker://docker.io/${{ secrets.DOCKERHUB_USERNAME }}/mbed-os-env:${{ steps.build_info.outputs.DOCKER_DEV_TAG }}  docker://docker.io/${{ secrets.DOCKERHUB_USERNAME }}/mbed-os-env:${{ steps.build_info.outputs.DOCKER_PROD_TAG_DATED }}
           docker run quay.io/skopeo/stable --src-creds=${{ secrets.DOCKERHUB_USERNAME }}:${{ secrets.DOCKERHUB_PASSWORD }} --dest-creds=${{ secrets.DOCKERHUB_USERNAME }}:${{ secrets.DOCKERHUB_PASSWORD }} copy --all docker://docker.io/${{ secrets.DOCKERHUB_USERNAME }}/mbed-os-env:${{ steps.build_info.outputs.DOCKER_DEV_TAG }}  docker://docker.io/${{ secrets.DOCKERHUB_USERNAME }}/mbed-os-env:latest
       
-      - if: needs.test-container.outputs.STARUS == 'failed'
+      - if: needs.test-container.outputs.STATUS == 'failed'
         name: Rename Dev Tag
         run: |
           docker run quay.io/skopeo/stable --src-creds=${{ secrets.DOCKERHUB_USERNAME }}:${{ secrets.DOCKERHUB_PASSWORD }} --dest-creds=${{ secrets.DOCKERHUB_USERNAME }}:${{ secrets.DOCKERHUB_PASSWORD }} copy --all docker://docker.io/${{ secrets.DOCKERHUB_USERNAME }}/mbed-os-env:${{ steps.build_info.outputs.DOCKER_DEV_TAG }}  docker://docker.io/${{ secrets.DOCKERHUB_USERNAME }}/mbed-os-env:failed-${{ steps.build_info.outputs.DOCKER_DEV_TAG }}
