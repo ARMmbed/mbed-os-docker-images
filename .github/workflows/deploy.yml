@@ -206,14 +206,15 @@ jobs:
           image: ${{ secrets.DOCKERHUB_USERNAME }}/mbed-os-env@${{ steps.docker_info_dev.outputs.DIGEST }}
           shell: bash
           run: |
-            set -e 
             uname -m
-            mbed import mbed-os-example-blinky
-            cd mbed-os-example-blinky
-            git checkout ${{ steps.build_info.outputs.MBED_OS_VERSION }}
-            mbed deploy 
-            mbed compile -m K64F -t GCC_ARM
-            echo "::set-output name=DEPLOY::true"
+            ./test.sh ${{ steps.build_info.outputs.MBED_OS_VERSION }}
+            # set -e 
+            # mbed import mbed-os-example-blinky
+            # cd mbed-os-example-blinky
+            # git checkout ${{ steps.build_info.outputs.MBED_OS_VERSION }}
+            # mbed deploy 
+            # mbed compile -m K64F -t GCC_ARM
+            # echo "::set-output name=DEPLOY::true"
             
       
   deploy-container:
