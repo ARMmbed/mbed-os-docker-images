@@ -222,7 +222,7 @@ jobs:
   deploy-container:
     runs-on: ubuntu-latest
     needs: test-container
-    if: always()
+    if:  ${{ always() }}
     # if: needs.test-container.outputs.DEPLOY == 'true'
         
     steps:
