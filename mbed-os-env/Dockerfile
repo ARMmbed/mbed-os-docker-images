@@ -82,3 +82,5 @@ RUN python3 --version | tee env_settings && \
     (echo -n 'mbed-greentea ' && mbedgt --version) | tee -a env_settings && \
     (echo -n 'mbed-host-tests ' && mbedhtrun --version) | tee -a env_settings && \
     (echo -n 'mbed-tools ' && mbed-tools --version) | tee -a env_settings
+
+WORKDIR /root
