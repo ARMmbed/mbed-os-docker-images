@@ -174,8 +174,7 @@ jobs:
       - if: steps.docker_info_prod.outputs.DIGEST != steps.docker_info_dev.outputs.DIGEST
         name: test the container
         id: test
-        uses: 
-        options: -v ${{ github.workspace }}:/work -w=work
+        uses: addnab/docker-run-action@v2
         with:
           image: ${{ secrets.DOCKERHUB_USERNAME }}/mbed-os-env@${{ steps.docker_info_dev.outputs.DIGEST }}
           shell: bash
@@ -183,8 +182,7 @@ jobs:
             set -e
             echo "::set-output name=STATUS::failed"
             uname -m
-            ls /work
-            /work/mbed-os-env/test.sh ${{ steps.build_info.outputs.MBED_OS_VERSION }}
+            ./mbed-os-env/test.sh ${{ steps.build_info.outputs.MBED_OS_VERSION }}
             echo "::set-output name=STATUS::passed"
 
   cleanup:
