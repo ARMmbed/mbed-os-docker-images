@@ -175,7 +175,7 @@ jobs:
         name: test the container
         id: test
         uses: 
-        options: -v ${{ github.workspace }}:/work
+        options: -v ${{ github.workspace }}:/work -w=work
         with:
           image: ${{ secrets.DOCKERHUB_USERNAME }}/mbed-os-env@${{ steps.docker_info_dev.outputs.DIGEST }}
           shell: bash

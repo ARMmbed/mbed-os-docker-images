@@ -201,6 +201,7 @@ jobs:
         name: test the container
         id: test
         uses: addnab/docker-run-action@v2
+        options: -v ${{ github.workspace }}:/work -w=work
         with:
           image: ${{ secrets.DOCKERHUB_USERNAME }}/mbed-os-env@${{ steps.docker_info_dev.outputs.DIGEST }}
           shell: bash
@@ -209,6 +210,7 @@ jobs:
             echo "::set-output name=STATUS::failed"
             uname -m
             ls
+            pwed
             ./mbed-os-env/test.sh ${{ steps.build_info.outputs.MBED_OS_VERSION }}
             echo "::set-output name=STATUS::passed"
             
