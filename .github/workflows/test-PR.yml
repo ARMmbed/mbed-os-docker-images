@@ -52,4 +52,4 @@ jobs:
             set -e
             echo "::set-output name=STATUS::failed"
             uname -m
-            ./mbed-os-env/test.sh ${{ steps.build_info.outputs.MBED_OS_VERSION }}
+            ./mbed-os-env/test.sh 
