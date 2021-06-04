@@ -2,7 +2,7 @@ name: build and test image
 
 on:
   pull_request:
-    branches: [ main ]
+    branches: [ master ]
 
 jobs:
 
