@@ -2,7 +2,7 @@ name: build and test image
 
 on:
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
 
 jobs:
 
@@ -47,7 +47,7 @@ jobs:
           path: build_info
           
 
-  build-container1:
+  build-container:
     runs-on: ubuntu-latest
     needs: prepare-tags
 
