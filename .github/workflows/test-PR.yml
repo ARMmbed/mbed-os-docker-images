@@ -37,7 +37,7 @@ jobs:
           context: .
           platforms: ${{ matrix.platform }}
           file: ./mbed-os-env/Dockerfile
-          tags: mbed-os-env:${{ matrix.platform }}
+          tags: mbed-os-env:a_platform
           cache-from: type=registry,ref=mbedos/mbed-os-env:latest
           cache-to: type=inline
 
@@ -47,7 +47,7 @@ jobs:
         uses: addnab/docker-run-action@v2
         with:
           options: -v ${{ github.workspace }}:/work -w=/work
-          image: mbed-os-env:${{ matrix.platform }}
+          image: mbed-os-env:a_platform
           shell: bash
           run: |
             set -e
