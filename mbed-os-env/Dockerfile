@@ -29,6 +29,7 @@ RUN set -x \
     libssl-dev \
     cargo \
     && apt clean && rm -rf /var/lib/apt/lists \
+    && update-alternatives --install /usr/bin/python python /usr/bin/python3.8 1 \
     && : # last line
 
 # Cmake (Mbed OS requires >=3.19.0-rc3 version which is not available in Ubuntu 20.04 repository)
