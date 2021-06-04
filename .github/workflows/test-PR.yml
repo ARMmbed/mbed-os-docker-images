@@ -11,8 +11,7 @@ jobs:
 
     strategy:
       matrix:
-#         platform: [linux/amd64, linux/arm64]
-        platform: [linux/amd64]
+        platform: [linux/amd64, linux/arm64]
     steps:
 
       - 
@@ -40,7 +39,6 @@ jobs:
           load: true
           tags: mbed-os-env:a_platform
           cache-from: type=registry,ref=mbedos/mbed-os-env:latest
-          cache-to: type=inline
 
       - 
         name: test the container
