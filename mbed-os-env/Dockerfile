@@ -22,7 +22,6 @@ RUN set -x \
     python3-pip \
     software-properties-common \
     build-essential \
-    cmake \
     astyle \
     mercurial \
     ninja-build \
@@ -64,7 +63,7 @@ RUN set -x \
 # Install arm-none-eabi-gcc
 WORKDIR /opt/mbed-os-toolchain
 RUN set -x \
-    && [ "$(uname -m)" = "aarch64" ] \
+    && [ "$(uname -m)" = "aarch64" ] && \
         TARBALL="gcc-arm-none-eabi-9-2019-q4-major-aarch64-linux.tar.bz2" || \
         TARBALL="gcc-arm-none-eabi-9-2019-q4-major-x86_64-linux.tar.bz2" \
     && wget -q https://developer.arm.com/-/media/Files/downloads/gnu-rm/9-2019q4/RC2.1/${TARBALL} \
