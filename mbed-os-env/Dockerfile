@@ -43,13 +43,7 @@ RUN set -x \
     && exec bash \
     && : # last line
 
-# ------------------------------------------------------------------------------
-# Install Python modules (which are not included in requirements.txt)
-RUN set -x \
-    && pip3 install -U \
-    mbed-cli \
-    mbed-tools \
-    && : # last line
+
 
 # Set up mbed environment
 WORKDIR /tmp/
@@ -59,6 +53,14 @@ RUN set -x \
     && rm requirements.txt \
     && : # last line
 
+# ------------------------------------------------------------------------------
+# Install Python modules (which are not included in requirements.txt)
+RUN set -x \
+    && pip3 install -U \
+    mbed-cli \
+    mbed-tools \
+    && : # last line
+    
 # ------------------------------------------------------------------------------
 # Install arm-none-eabi-gcc
 WORKDIR /opt/mbed-os-toolchain
