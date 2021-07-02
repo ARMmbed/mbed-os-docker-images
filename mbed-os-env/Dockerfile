@@ -2,6 +2,7 @@
 # Pull base image
 FROM ubuntu:20.04
 
+ENV TEST=1
 # ------------------------------------------------------------------------------
 # Arguments
 ARG WORKDIR=/root
