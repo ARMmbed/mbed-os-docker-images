@@ -54,7 +54,7 @@ RUN set -x \
 # Set up mbed environment
 WORKDIR /tmp/
 RUN set -x \
-    && wget -q https://github.com/ARMmbed/mbed-os/raw/${MBED_OS_VER}/requirements.txt \
+    && wget -q https://github.com/ARMmbed/mbed-os/raw/master/requirements.txt \
     && pip3 install -r requirements.txt  \
     && rm requirements.txt \
     && : # last line
