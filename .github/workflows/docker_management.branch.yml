@@ -62,13 +62,13 @@ jobs:
       -
         name: Checkout
         uses: actions/checkout@v2
-        
+
       - 
         name: Find DEV DOCKER DIGEST
         id: docker_info_dev
         run: |
-          tag=dev-master-2021.08.05T15.02.20-2222dae0-f5fe-11eb-8e22-6b8327c81a13
-          PLATFORM="linux/amd64"
+          TAG=dev-master-2021.08.05T15.02.20-2222dae0-f5fe-11eb-8e22-6b8327c81a13
+          PLATFORM=linux/amd64
           DIGEST=$(python ./.github/workflows/ci_scripts/ghcr_utils.py -u ${{ steps.build_info.outputs.REPO_OWNER }} -p ${{ secrets.GITHUB_TOKEN }} get-digest -r mbed-os-env-tmp -t ${TAG} -p ${PLATFORM} )
           echo "::set-output name=DIGEST::$DIGEST"
           echo "Docker DIGEST: $DIGEST"
