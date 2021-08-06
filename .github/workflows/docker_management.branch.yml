@@ -46,6 +46,7 @@ jobs:
         shell: bash
         id: build_info
         run: |
+          cd build_info
           # value=`cat dev_tag`
           # echo "DEV TAG is $value"
           # echo "::set-output name=DOCKER_DEV_TAG::$value"
