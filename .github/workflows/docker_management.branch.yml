@@ -1,0 +1,69 @@
+name: Publish or Update docker image for head of branch
+# Design details in https://github.com/ARMmbed/mbed-os/blob/master/docs/design-documents/docker_management
+
+on:
+
+  # passive update once a week
+  schedule:
+    - cron:  '15 4 * * 6'
+
+  # build on master branch when there is changes for active update
+  push:
+    branches: 
+      - master
+      - github-action-test
+
+  # manual trigger when needed 
+  workflow_dispatch: 
+
+
+jobs:
+  prepare-tags:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - 
+        name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract_branch
+
+      - 
+        name: Get build information
+        shell: bash
+        run: |
+          mkdir -p build_info
+          date=$(date +"%Y.%m.%dT%H.%M.%S")
+          echo dev-${{ steps.extract_branch.outputs.branch }}-${date}-${{ steps.generate-uuid.outputs.uuid }} > build_info/dev_tag
+          echo ${{ steps.extract_branch.outputs.branch }}-${date} > build_info/prod_tag_dated
+          echo ${{ steps.extract_branch.outputs.branch }}-latest > build_info/prod_tag_latest
+          echo ${{ steps.extract_branch.outputs.branch }} > build_info/mbed_os_version
+          echo ${{ github.repository_owner }} | tr '[:upper:]' '[:lower:]' > build_info/repository_owner
+
+      - 
+        name: Get build info from archive
+        shell: bash
+        id: build_info
+        run: |
+          value=`cat dev_tag`
+          echo "DEV TAG is $value"
+          echo "::set-output name=DOCKER_DEV_TAG::$value"
+          value=`cat prod_tag_dated`
+          echo "PROD TAG DATED is $value"
+          echo "::set-output name=DOCKER_PROD_TAG_DATED::$value"
+          value=`cat prod_tag_latest`
+          echo "::set-output name=DOCKER_PROD_TAG_LATEST::$value"
+          echo "PROD TAG is $value"
+          value=`cat repository_owner`
+          echo "::set-output name=REPO_OWNER::$value"
+
+      - 
+        name: Find DEV DOCKER DIGEST
+        id: docker_info_dev
+        run: |
+          tag=dev-master-2021.08.05T15.02.20-2222dae0-f5fe-11eb-8e22-6b8327c81a13
+          PLATFORM="linux/amd64"
+          DIGEST=$(python ./.github/workflows/ci_scripts/ghcr_utils.py -u ${{ steps.build_info.outputs.REPO_OWNER }} -p ${{ secrets.GITHUB_TOKEN }} get-digest -r mbed-os-env-tmp -t ${TAG} -p ${PLATFORM} )
+          echo "::set-output name=DIGEST::$DIGEST"
+          echo "Docker DIGEST: $DIGEST"
