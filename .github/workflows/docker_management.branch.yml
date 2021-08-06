@@ -59,6 +59,10 @@ jobs:
           value=`cat repository_owner`
           echo "::set-output name=REPO_OWNER::$value"
 
+      -
+        name: Checkout
+        uses: actions/checkout@v2
+        
       - 
         name: Find DEV DOCKER DIGEST
         id: docker_info_dev
