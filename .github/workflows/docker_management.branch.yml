@@ -46,15 +46,15 @@ jobs:
         shell: bash
         id: build_info
         run: |
-          value=`cat dev_tag`
-          echo "DEV TAG is $value"
-          echo "::set-output name=DOCKER_DEV_TAG::$value"
-          value=`cat prod_tag_dated`
-          echo "PROD TAG DATED is $value"
-          echo "::set-output name=DOCKER_PROD_TAG_DATED::$value"
-          value=`cat prod_tag_latest`
-          echo "::set-output name=DOCKER_PROD_TAG_LATEST::$value"
-          echo "PROD TAG is $value"
+          # value=`cat dev_tag`
+          # echo "DEV TAG is $value"
+          # echo "::set-output name=DOCKER_DEV_TAG::$value"
+          # value=`cat prod_tag_dated`
+          # echo "PROD TAG DATED is $value"
+          # echo "::set-output name=DOCKER_PROD_TAG_DATED::$value"
+          # value=`cat prod_tag_latest`
+          # echo "::set-output name=DOCKER_PROD_TAG_LATEST::$value"
+          # echo "PROD TAG is $value"
           value=`cat repository_owner`
           echo "::set-output name=REPO_OWNER::$value"
 
